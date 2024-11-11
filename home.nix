@@ -36,6 +36,8 @@
 		networkmanagerapplet
 		overskride
 		wvkbd
+
+
 	];
 	programs = {
 		waybar.enable = true;

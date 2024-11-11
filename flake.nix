@@ -37,7 +37,6 @@
 		let
 			system = "x86_64-linux";
 			pkgs = nixpkgs.legacyPackages.${system};
-			# inputs.username = "linuxuser";
 		in {
 			homeModules.default = ./default.nix;
 
