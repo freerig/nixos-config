@@ -21,8 +21,9 @@
 		rustup
 
 		spotify
-		#signal-desktop
+		signal-desktop
 		atlauncher
+		musescore
 
 		#tor-browser
 		#brave
@@ -34,10 +35,7 @@
 
 		pavucontrol
 		networkmanagerapplet
-		overskride
 		wvkbd
-
-
 	];
 	programs = {
 		waybar.enable = true;
@@ -50,7 +48,7 @@
 		kitty = {
 			enable = true;
 			settings = {
-				background_opacity = lib.mkForce 0.75;
+				#background_opacity = lib.mkForce 0.75;
 			};
 		};
 		git = {

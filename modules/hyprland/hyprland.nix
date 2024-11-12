@@ -4,9 +4,24 @@ let
 	hyprPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
+  nix.settings = {
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
+
 	home.packages = with pkgs; [
 		hyprsunset
+
+		jq
 	];
+#	systemd.user.services.iio-hyprland = {
+#		Service = {
+#			ExecStart = lib.getExe pkgs.iio-hyprland;
+#		};
+#		Installer = {
+#			WantedBy = "graphical.target";
+#		};
+#	};
 
 	wayland.windowManager.hyprland = {
 		enable = true;
@@ -77,6 +92,7 @@ in
 				"$mod, Return, exec, $TERMINAL --hold fastfetch"
 				"$mod, B, exec, $BROWSER"
 				", Print, exec, ${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp} -d)\" - | ${lib.getExe pkgs.swappy} -f -"
+				"$mod, W, exec, [workspace 9] ${pkgs.virtualbox}/bin/VBoxManage startvm 'Windows 11 Pro Edu'"
 
 				# === Secial keys ===
 
@@ -154,10 +170,20 @@ in
 				"$mod, ALT_L, resizewindow"
 				"$mod SHIFT, ALT_L, resizewindow 1"
 			];
+
+			plugin = {
+				touch_gestures = {
+					hyprgrass-bindm = [
+						", longpress:2, movewindow"
+						", longpress:3, resizewindow"
+					];
+				};
+			};
 		};
 
 		plugins = [
-			inputs.hyprgrass.packages.${pkgs.stdenv.system}.default
+			#inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprgrass
+			inputs.hyprgrass.packages.${pkgs.system}.default
 		];
 	};
 
@@ -165,6 +191,8 @@ in
 		enable = true;
 		defaultTimeout = 10000;
 	};
+
+	# programs.iio-hyprland.enable = true;
 
 	#services.hyprpaper.enable = true;
 	

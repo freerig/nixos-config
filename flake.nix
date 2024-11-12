@@ -17,11 +17,15 @@
 			url = "github:hyprwm/Hyprland";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		hyprgrass = {
-    	url = "github:horriblename/hyprgrass";
-			inputs.nixpkgs.follows = "nixpkgs";
-  		inputs.hyprland.follows = "hyprland";
+		hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
     };
+		hyprgrass = {
+  		url = "github:horriblename/hyprgrass";
+    	inputs.hyprland.follows = "hyprland";
+    };
+
 		firefox-addons = {
 			url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -38,33 +42,40 @@
 			system = "x86_64-linux";
 			pkgs = nixpkgs.legacyPackages.${system};
 		in {
+
+			# === Default ===
+
 			homeModules.default = ./default.nix;
 
-			homeConfigurations.default = home-manager.lib.homeManagerConfiguration {
+			# === HM Standalone ===
+
+			homeConfigurations.default = { params, extraConfig }: (home-manager.lib.homeManagerConfiguration {
 				inherit pkgs;
 
-				extraSpecialArgs = { inherit inputs; };
+				extraSpecialArgs = { inherit inputs params; };
 
 				modules = [
 					self.homeModules.default
+					extraConfig
 				];
-			};
+			});
 
-			nixosModules.default = { user }: 
-			let
-				params = { inherit user; };
-			in
-			{imports = [
-				home-manager.nixosModules.home-manager
-				{
-					home-manager.useGlobalPkgs = true;
-					home-manager.useUserPackages = true;
+			# === HM NixOS Module ===
 
-					home-manager.users.${params.user} = import self.homeModules.default;
+			nixosModules.default = { params, extraConfig }: 
+				{imports = [
+					home-manager.nixosModules.home-manager
+					{
+						home-manager.useGlobalPkgs = true;
+						home-manager.useUserPackages = true;
 
-					home-manager.extraSpecialArgs = { inherit inputs params; };
-				} 
-			];};
+						home-manager.users.${params.user} = self.homeModules.default;
+
+						home-manager.extraSpecialArgs = { inherit inputs params; };
+					} 
+				];};
+
+			# === Themes ===
 
 			nixosThemeModules.WindowsXP = {imports = [
 				inputs.stylix.nixosModules.stylix
