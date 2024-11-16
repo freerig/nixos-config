@@ -4,10 +4,7 @@ let
 	hyprPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-  };
+  nix.settings.substituters = ["https://hyprland.cachix.org"];
 
 	home.packages = with pkgs; [
 		hyprsunset
@@ -34,6 +31,10 @@ in
 			monitor = [
 				"DVI-D-1,preferred,auto,auto"
 				"eDP-1,preferred,auto,1"
+			];
+
+			exec-once = [
+				"${lib.getExe pkgs.iio-hyprland}"
 			];
 
 			env = [
@@ -92,7 +93,7 @@ in
 				"$mod, Return, exec, $TERMINAL --hold fastfetch"
 				"$mod, B, exec, $BROWSER"
 				", Print, exec, ${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp} -d)\" - | ${lib.getExe pkgs.swappy} -f -"
-				"$mod, W, exec, [workspace 9] ${pkgs.virtualbox}/bin/VBoxManage startvm 'Windows 11 Pro Edu'"
+				"$mod, W, exec, [workspace 9] VBoxManage startvm 'Windows 11 Pro Edu'"
 
 				# === Secial keys ===
 
@@ -194,7 +195,7 @@ in
 
 	# programs.iio-hyprland.enable = true;
 
-	#services.hyprpaper.enable = true;
+	services.hyprpaper.enable = true;
 	
 	programs.waybar = {
 		enable = true;

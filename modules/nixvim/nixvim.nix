@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
 	imports = [ inputs.nixvim.homeManagerModules.nixvim ];
 	programs.nixvim = {
@@ -21,14 +21,32 @@
 					};
 				};
 			};
-			notify.enable = true;
+			notify = {
+				enable = true;
+				topDown = false;
+			};
 			noice.enable = true;
 
 
 			# Code
+
+			fugitive.enable = true;
+			gitsigns.enable = true;
+
+			undotree.enable = true;
 			todo-comments.enable = true;
 			indent-blankline.enable = true;
-
+			nvim-autopairs.enable = true;
+			treesitter = {
+				enable = true;
+				folding = true;
+				settings = {
+					highlight.enable = true;
+					# incremental_selection.enable = true;
+					indent.enable = true;
+				};
+			};
+			treesitter-context.enable = true;
 			lsp = {
 				enable = true;
 				servers = {
@@ -36,6 +54,7 @@
 					rust_analyzer.enable = true;
 					lua_ls.enable = true;
 					arduino_language_server.enable = true;
+					pyright.enable = true;
 				};
 				keymaps = {
 					lspBuf = {
@@ -70,6 +89,17 @@
 			# Other
 			web-devicons.enable = true;
 		};
+
+		extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
+			name = "Cellular Automaton";
+			src = pkgs.fetchFromGitHub {
+			owner = "Eandrju";
+				repo = "cellular-automaton.nvim";
+				rev = "11aea08aa084f9d523b0142c2cd9441b8ede09ed";
+				hash = "sha256-nIv7ISRk0+yWd1lGEwAV6u1U7EFQj/T9F8pU6O0Wf0s=";
+			};
+		})];
+
 		keymaps = [
 			{
 				mode = "n";
