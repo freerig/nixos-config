@@ -1,4 +1,5 @@
 { inputs, pkgs, ... }:
+
 {
 	imports = [ inputs.nixvim.homeManagerModules.nixvim ];
 	programs.nixvim = {
@@ -8,6 +9,7 @@
 			which-key.enable = true;
 			telescope = {
 				enable = true;
+				extensions.ui-select.enable = true;
 				keymaps = {
 					"<leader> " = { action = "find_files"; };
 				};
@@ -26,6 +28,8 @@
 				topDown = false;
 			};
 			noice.enable = true;
+			nui.enable = true;
+			#dressing.enable = true;
 
 
 			# Code
@@ -111,9 +115,16 @@
 		opts = {
 			tabstop = 2;
 			shiftwidth = 2;
+			
+			scrolloff = 5;
+			sidescrolloff = 5;
 
 			number = true;
 			relativenumber = true;
+
+			linebreak = true;
+			ignorecase = true;
+			cursorline = true;
 		};
 		globals.mapleader = " ";
 		clipboard.providers.wl-copy.enable = true;
