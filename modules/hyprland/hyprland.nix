@@ -80,7 +80,7 @@ in
 
 			misc = {
 				force_default_wallpaper = false;
-				vfr = true;
+				# vfr = true;
 			};
 
 			dwindle = {

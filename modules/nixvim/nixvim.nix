@@ -55,10 +55,15 @@
 				enable = true;
 				servers = {
 					nixd.enable = true;
-					rust_analyzer.enable = true;
+					rust_analyzer = {
+						enable = true;
+						installCargo = false;
+						installRustc = false;
+					};
 					lua_ls.enable = true;
 					arduino_language_server.enable = true;
 					pyright.enable = true;
+					glsl_analyzer.enable = true;
 				};
 				keymaps = {
 					lspBuf = {
@@ -129,5 +134,8 @@
 		globals.mapleader = " ";
 		clipboard.providers.wl-copy.enable = true;
 		clipboard.register = "unnamedplus";
+		filetype.extension = {
+			frag = "glsl";
+		};
 	};
 }
