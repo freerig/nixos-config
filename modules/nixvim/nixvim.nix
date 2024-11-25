@@ -64,6 +64,7 @@
 					arduino_language_server.enable = true;
 					pyright.enable = true;
 					glsl_analyzer.enable = true;
+					# glslls.enable = true;
 				};
 				keymaps = {
 					lspBuf = {

@@ -1,4 +1,4 @@
-{pkgs, lib, inputs, ...}: 
+{pkgs, lib, inputs, config, ...}: 
 
 let
 	hyprPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
@@ -20,10 +20,17 @@ in
 #		};
 #	};
 
+	xdg.portal = {
+		enable = true;
+		extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+		config.common.default = "*";
+	};
+
 	wayland.windowManager.hyprland = {
 		enable = true;
 		package = hyprPackages.hyprland;
 		xwayland.enable = true;
+		systemd.enableXdgAutostart = true;
 		settings = {
 			general = {
 			};
@@ -72,15 +79,16 @@ in
 
 			decoration = {
 				blur = {
-					enabled = true;
+					enabled = false; # true;
 					size = 1;
 					passes = 6;
 				};
+				shadow.enabled = false;
 			};
 
 			misc = {
 				force_default_wallpaper = false;
-				# vfr = true;
+				vfr = true;
 			};
 
 			dwindle = {
@@ -91,9 +99,10 @@ in
 
 			bind = [
 				"$mod, Return, exec, $TERMINAL --hold fastfetch"
-				"$mod, B, exec, $BROWSER"
+				"$mod, B, exec, $MY_BROWSER"
 				", Print, exec, ${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp} -d)\" - | ${lib.getExe pkgs.swappy} -f -"
-				"$mod, W, exec, [workspace 9] VBoxManage startvm 'Windows 11 Pro Edu'"
+				"$mod, W, exec, VBoxManage startvm 'Windows 11 Pro Edu'"
+				"$mod, Q, exec, ${lib.getExe pkgs.qalculate-gtk}"
 
 				# === Secial keys ===
 
@@ -105,6 +114,8 @@ in
 				", XF86AudioNext, exec, ${lib.getExe pkgs.playerctl} next"
 				", XF86AudioPrev, exec, ${lib.getExe pkgs.playerctl} previous"
 				
+				", XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} s 5%-"
+				", XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} s +5%"
 
 				# === Windows managing ===
 
@@ -146,6 +157,7 @@ in
 				# === Misc ===
 
 				"$mod, C, exec, ${lib.getExe pkgs.hyprpicker} -a"
+				"$mod, L, exec, ${lib.getExe pkgs.hyprlock}"
 			]
 			++ (
 				# workspaces
@@ -194,6 +206,59 @@ in
 	};
 
 	# programs.iio-hyprland.enable = true;
+	services.hypridle = {
+		enable = true;
+		settings = {
+			general = {
+				lock_cmd = "pidof ${lib.getExe pkgs.hyprlock} || ${lib.getExe pkgs.hyprlock}";
+				before_sleep_cmd = "loginctl lock-session";
+				after_sleep_cmd = "hyprctl dispatch dpms on";
+			};
+			listeners = [
+				{
+					timeout = 120;
+					on-timeout = "loginctl lock-session";
+				}
+			];
+		};
+	};
+	programs.hyprlock = {
+		enable = true;
+		settings = {
+			general = {
+				disable_loading_bar = true;
+				hide_cursor = true;
+				no_fade_in = false;
+			};
+
+			input-field = {
+				size = "300, 50";
+				position = "0, 0";
+				monitor = "";
+				dots_center = true;
+				fade_on_empty = false;
+				outline_thickness = 5;
+				placeholder_text = "Ho ! Touche pas !";
+			};
+
+			label = with config.lib.stylix.colors; [
+				{
+					text = "cmd[update:60000] ${lib.getExe pkgs.fortune-kind}";
+					valign = "bottom";
+					halign = "center";
+					position = "0, 50";
+					color = "rgb(${base05})";
+				}
+				{
+					text = "cmd[update:3000] echo $(cat /sys/class/power_supply/BAT0/capacity)%";
+					valign = "bottom";
+					halign = "left";
+					position = "20, 20";
+					color = "rgb(${base05})";
+				}
+			];
+		};
+	};
 
 	services.hyprpaper.enable = true;
 	

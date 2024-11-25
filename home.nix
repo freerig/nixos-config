@@ -10,11 +10,10 @@
 	home.homeDirectory = "/home/${params.user}";
 
 
-	# The home.packages option allows you to install Nix packages into your
-
-	# environment.
 	home.packages = with pkgs; [
-		lf
+		duf
+		ncdu
+
 		radicale
 		docker-compose
 
@@ -43,6 +42,12 @@
 				"sudit" = "sudo -E $EDITOR";
 			};
 		};
+		zoxide.enable = true;
+		fd.enable = true;
+		bat.enable = true;
+		eza.enable = true;
+		lf.enable = true;
+		fzf.enable = true;
 		kitty = {
 			enable = true;
 			settings = {
@@ -59,6 +64,13 @@
 		};
 	};
 	gtk.enable = true;
+	xdg.enable = true;
+	xdg.mime.enable = true;
+	xdg.portal = {
+		enable = true;
+		extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+	};
+	# environment.pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
 
 	nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
 		"spotify"
@@ -66,7 +78,7 @@
 
 	home.sessionVariables = {
 		EDITOR = "nvim";
-		BROWSER = lib.getExe pkgs.brave;
+		MY_BROWSER = lib.getExe pkgs.brave;
 		TERMINAL = lib.getExe pkgs.kitty;
 	};
 
