@@ -219,6 +219,11 @@ in
 					timeout = 120;
 					on-timeout = "loginctl lock-session";
 				}
+				{
+					timeout = 150;
+					on-timeout = "hyprctl dispatch dpms off";
+					on-resume = "hyprctl dispatch dpms on";
+				}
 			];
 		};
 	};

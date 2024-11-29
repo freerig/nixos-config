@@ -43,7 +43,6 @@
 			nvim-autopairs.enable = true;
 			treesitter = {
 				enable = true;
-				folding = true;
 				settings = {
 					highlight.enable = true;
 					# incremental_selection.enable = true;
@@ -61,7 +60,17 @@
 						installRustc = false;
 					};
 					lua_ls.enable = true;
-					arduino_language_server.enable = true;
+					arduino_language_server = {
+						enable = true;
+						extraOptions = {
+							cmd = [
+								"arduino-language-server"
+								"-cli" "${pkgs.arduino-cli}/bin/arduino-cli"
+								# "-cli-config" "/home/linuxuser/.arduino15/arduino-cli.yaml"
+								"-clangd" "${pkgs.clang}/bin/clangd"
+							];
+						};
+					};
 					pyright.enable = true;
 					glsl_analyzer.enable = true;
 					# glslls.enable = true;

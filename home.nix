@@ -40,6 +40,7 @@
 			enable = true;
 			shellAliases = {
 				"sudit" = "sudo -E $EDITOR";
+				"lfcd" = "cd $(lf --print-last-dir)";
 			};
 		};
 		zoxide.enable = true;
