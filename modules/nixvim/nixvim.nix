@@ -1,17 +1,49 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, lib, ... }:
 
 {
 	imports = [ inputs.nixvim.homeManagerModules.nixvim ];
 	programs.nixvim = {
 		enable = true;
 		plugins = {
-			# Editor
-			which-key.enable = true;
+
+			# === Editor ===
+			dashboard = {
+				enable = true;
+				settings.config = {
+					header = [ (lib.generators.mkLuaInline ''
+""),
+"BONJOUR",
+(""
+					'') ];
+				};
+			};
+			persistence.enable = true;
+			# spider, specs, why not ?
+			oil.enable = true;
+			leap.enable = true;
+			neoscroll.enable = true;
+			hardtime = {
+				enable = true;
+			};
+			which-key = {
+				enable = true;
+				settings = {
+					spec = [
+						{
+							__unkeyed-1 = "<leader>c";
+							group = "Code & LSP";
+						}
+					];
+				};
+			};
 			telescope = {
 				enable = true;
 				extensions.ui-select.enable = true;
 				keymaps = {
-					"<leader> " = { action = "find_files"; };
+					"<leader> " = {
+						action = "find_files";
+						options.desc = "Find files";
+					};
 				};
 			};
 			neo-tree = {
@@ -26,17 +58,19 @@
 			notify = {
 				enable = true;
 				topDown = false;
+				stages = "slide";
+				render = "minimal";
 			};
 			noice.enable = true;
 			nui.enable = true;
 			#dressing.enable = true;
+			lualine.enable = true;
+			bufferline.enable = true;
 
 
-			# Code
-
+			# === Code ===
 			fugitive.enable = true;
 			gitsigns.enable = true;
-
 			undotree.enable = true;
 			todo-comments.enable = true;
 			indent-blankline.enable = true;
@@ -44,12 +78,24 @@
 			treesitter = {
 				enable = true;
 				settings = {
+					auto_install = true;
 					highlight.enable = true;
-					# incremental_selection.enable = true;
+					incremental_selection = {
+						enable = true;
+						keymaps = {
+							init_selection = false;
+							node_decremental = "grm";
+							node_incremental = "grn";
+							scope_incremental = "grc";
+						};
+					};
 					indent.enable = true;
 				};
 			};
 			treesitter-context.enable = true;
+			trouble = {
+				enable = true;
+			};
 			lsp = {
 				enable = true;
 				servers = {
@@ -77,12 +123,17 @@
 				};
 				keymaps = {
 					lspBuf = {
-						"K" = { action = "hover"; };
-						"<leader>ca" = { action = "code_action"; };
+						"<leader>ck" = {
+							action = "hover";
+							desc = "LSP hover";
+						};
+						"<leader>ca" = { 
+							action = "code_action";
+							desc = "Code actions";
+						};
 					};
 				};
 			};
-
 			cmp = {
 				enable = true;
 				autoEnableSources = true;
@@ -98,14 +149,14 @@
 						"<C-e>" = "cmp.mapping.close()";
 						"<C-f>" = "cmp.mapping.scroll_docs(4)";
 						"<Tab>" = "cmp.mapping.confirm({ select = true })";
-						"<S-j>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-						"<S-k>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+						"J" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+						"K" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
 					};
 				};
 			};
 			
 
-			# Other
+			# === Other ===
 			web-devicons.enable = true;
 		};
 
@@ -125,6 +176,11 @@
 				key = "<leader>e";
 				action = "<cmd>Neotree<CR>";
 			}
+			{
+				mode = "n";
+				key = "K";
+				action = "<Nop>";
+			}
 		];
 		
 		opts = {
@@ -137,13 +193,25 @@
 			number = true;
 			relativenumber = true;
 
-			linebreak = true;
+			splitright = true;
+			splitbelow = true;
+
 			ignorecase = true;
+			smartcase = true;
+
+			linebreak = true;
 			cursorline = true;
+			colorcolumn = "80";
+			ww = "h,l,<,>,[,]";
+			undofile = true;
 		};
-		globals.mapleader = " ";
+		globals = {
+			mapleader = " ";
+		};
+		luaLoader.enable = true;
 		clipboard.providers.wl-copy.enable = true;
 		clipboard.register = "unnamedplus";
+
 		filetype.extension = {
 			frag = "glsl";
 		};
