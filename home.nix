@@ -41,6 +41,9 @@
 			shellAliases = {
 				"sudit" = "sudo -E $EDITOR";
 				"lfcd" = "cd $(lf --print-last-dir)";
+				"nrs" = "sudo nixos-rebuild switch";
+				"nfu" = "nix flake update";
+				"snfu" = "sudo nix flake update";
 			};
 		};
 		zoxide.enable = true;
@@ -65,6 +68,7 @@
 		};
 	};
 	gtk.enable = true;
+	qt.enable = true;
 	xdg.enable = true;
 	xdg.mime.enable = true;
 	xdg.portal = {
