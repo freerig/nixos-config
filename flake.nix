@@ -26,10 +26,10 @@
 			inputs.hyprland.follows = "hyprland";
 		};
 
-		firefox-addons = {
-			url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
+		# firefox-addons = {
+		# 	url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+		# 	inputs.nixpkgs.follows = "nixpkgs";
+		# };
 
 		stylix = {
 			url = "github:danth/stylix";
@@ -41,6 +41,7 @@
 		let
 			system = "x86_64-linux";
 			pkgs = nixpkgs.legacyPackages.${system};
+			hyprPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 		in {
 
 			# === Default ===
@@ -64,6 +65,7 @@
 
 			nixosModules.default = { params, extraConfig }: 
 				{imports = [
+					# inputs.hyprland.nixosModules.default
 					home-manager.nixosModules.home-manager
 					{
 						home-manager.useGlobalPkgs = true;
@@ -82,6 +84,7 @@
 				./WindowsXP.nix
 				{
 					programs.dconf.enable = true;
+					stylix.targets.grub.useImage = true;
 				}
 			];};
 		};

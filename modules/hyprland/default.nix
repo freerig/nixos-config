@@ -4,6 +4,9 @@ let
 	hyprPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
+	imports = [
+		inputs.hyprland.homeManagerModules.default
+	];
   nix.settings = {
 		substituters = ["https://hyprland.cachix.org"];
 		trusted-substituters = ["https://hyprland.cachix.org"];
@@ -24,17 +27,15 @@ in
 #		};
 #	};
 
-	xdg.portal = {
-		enable = true;
-		extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-		config.common.default = "*";
-	};
-
 	wayland.windowManager.hyprland = {
 		enable = true;
 		package = hyprPackages.hyprland;
 		xwayland.enable = true;
-		systemd.enableXdgAutostart = true;
+		systemd = {
+			enable = true;
+			enableXdgAutostart = true;
+			variables = [ "--all" ];
+		};
 		settings = {
 			general = {
 			};
@@ -46,10 +47,6 @@ in
 
 			exec-once = [
 				"${lib.getExe pkgs.iio-hyprland}"
-			];
-
-			env = [
-			#	"HYPRCURSOR_SIZE,48"
 			];
 
 			input = {

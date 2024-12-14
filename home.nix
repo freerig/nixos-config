@@ -60,8 +60,6 @@
 		};
 		git = {
 			enable = true;
-			userName = "freerig";
-			userEmail = "github.aeration096@passmail.net";
 			extraConfig = {
 				init.defaultBranch = "main";
 			};
@@ -71,10 +69,6 @@
 	qt.enable = true;
 	xdg.enable = true;
 	xdg.mime.enable = true;
-	xdg.portal = {
-		enable = true;
-		extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-	};
 	# environment.pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
 
 	nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -83,7 +77,7 @@
 
 	home.sessionVariables = {
 		EDITOR = "nvim";
-		MY_BROWSER = lib.getExe pkgs.brave;
+		MY_BROWSER = lib.getExe pkgs.librewolf;
 		TERMINAL = lib.getExe pkgs.kitty;
 	};
 
